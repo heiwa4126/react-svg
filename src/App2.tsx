@@ -25,13 +25,7 @@ function App() {
 				>
 					<title>svg</title>
 					<circle cx="500" cy="500" r="400" fill="rgba(255, 0, 0, 0.2)" />
-					<rect
-						x="200"
-						y="200"
-						width="600"
-						height="600"
-						fill="rgba(0, 0, 255, 0.2)"
-					/>
+					<rect x="200" y="200" width="600" height="600" fill="rgba(0, 0, 255, 0.2)" />
 				</svg>
 			</div>
 		</>

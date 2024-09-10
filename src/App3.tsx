@@ -69,11 +69,7 @@ function SvgQr({ item }: { item: Data }) {
 	);
 }
 
-function SvgQRs({
-	width,
-	height,
-	data,
-}: { width: number; height: number; data: Data[] }) {
+function SvgQRs({ width, height, data }: { width: number; height: number; data: Data[] }) {
 	if (data.length === 0) return <></>;
 
 	return (
