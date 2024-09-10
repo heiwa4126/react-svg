@@ -50,14 +50,8 @@ function SvgQr({ item }: { item: Data }) {
 	return (
 		<>
 			<polygon
-				points={`
-						${p.topLeft.x},${p.topLeft.y}
-						${p.topRight.x},${p.topRight.y}
-						${p.bottomRight.x},${p.bottomRight.y}
-						${p.bottomLeft.x},${p.bottomLeft.y}
-						${p.topLeft.x},${p.topLeft.y}
-					`}
-				fill="rgba(0, 255, 0, 0.2)"
+				points={`${p.topLeft.x},${p.topLeft.y} ${p.topRight.x},${p.topRight.y} ${p.bottomRight.x},${p.bottomRight.y} ${p.bottomLeft.x},${p.bottomLeft.y}`}
+				fill="rgba(0, 255, 0, 0.4)"
 				stroke="none"
 				strokeWidth="10"
 			/>
