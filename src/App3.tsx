@@ -69,11 +69,13 @@ function SvgQr({ item }: { item: Data }) {
 	);
 }
 
-function SvgX({
+function SvgQRs({
 	width,
 	height,
 	data,
 }: { width: number; height: number; data: Data[] }) {
+	if (data.length === 0) return <></>;
+
 	return (
 		<svg
 			style={{
@@ -104,7 +106,7 @@ function App() {
 					alt="QRCode Example No.5 (3024 x 1935)"
 					style={{ display: "block", width: "800px", height: "auto" }}
 				/>
-				<SvgX width={3024} height={1935} data={data1} />
+				<SvgQRs width={3024} height={1935} data={data1} />
 			</div>
 		</>
 	);
