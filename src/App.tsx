@@ -1,33 +1,67 @@
-import { useState } from "react";
+import { SVG, type Svg } from "@svgdotjs/svg.js";
 import "./App.css";
-import viteLogo from "/vite.svg";
-import reactLogo from "./assets/react.svg";
+
+/**
+ * サンプル用にバングラデシュの国旗みたいなSVGを作る関数
+ * @returns svg.jsのSvgオブジェクト。.svg()でSVG文字列を取得できる
+ */
+function getSvgEx1(): Svg {
+	const width = 320;
+	const height = 180;
+	const diameter = 100;
+
+	const draw = SVG().size(width, height);
+	draw.rect(width, height).fill("#0f0"); // SVGには背景色という観念がない
+	draw
+		.circle(diameter)
+		.fill("#f00")
+		.center(width / 2, height / 2);
+
+	draw
+		.text("Hello, SVG.js!")
+		.font({
+			family: "Arial",
+			size: 45,
+			anchor: "middle",
+			leading: "1.5em",
+		})
+		.fill("#00f")
+		.cx(width / 2)
+		.cy(height / 2);
+
+	draw // monospace test
+		.text("monospace font")
+		.font({
+			family: "Consolas, Menlo, monospace",
+			size: 30,
+			anchor: "middle",
+			leading: "1.0em",
+		})
+		.fill("#fff")
+		.cx(width / 2)
+		.cy(height / 2 + 36);
+
+	return draw;
+}
+
+/**
+ * svg.jsのSvgオブジェクトを描画するためのコンポーネント
+ * dangerouslySetInnerHTMLを使っているので1か所にまとめてある
+ * @param src - The SVG object to render.
+ */
+function SvgComponent({ src }: { src: Svg }) {
+	// biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
+	return <div dangerouslySetInnerHTML={{ __html: src.svg() }} />;
+}
 
 function App() {
-	const [count, setCount] = useState(0);
+	const svg1 = getSvgEx1();
 
 	return (
 		<>
-			<div>
-				<a href="https://vitejs.dev" target="_blank" rel="noreferrer">
-					<img src={viteLogo} className="logo" alt="Vite logo" />
-				</a>
-				<a href="https://react.dev" target="_blank" rel="noreferrer">
-					<img src={reactLogo} className="logo react" alt="React logo" />
-				</a>
-			</div>
-			<h1>Vite + React</h1>
-			<div className="card">
-				<button type="button" onClick={() => setCount((count) => count + 1)}>
-					count is {count}
-				</button>
-				<p>
-					Edit <code>src/App.tsx</code> and save to test HMR
-				</p>
-			</div>
-			<p className="read-the-docs">
-				Click on the Vite and React logos to learn more
-			</p>
+			<h1>1. 動的にSVGを作って描画する</h1>
+			<p>SVGは変化しないものとする</p>
+			<SvgComponent src={svg1} />
 		</>
 	);
 }
