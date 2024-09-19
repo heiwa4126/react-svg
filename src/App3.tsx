@@ -56,9 +56,9 @@ function SvgQr({ item }: { item: Data }) {
 				strokeWidth="10"
 			/>
 			<text
-				font-family="Arial"
-				font-size="60"
-				text-anchor="middle"
+				fontFamily="Arial"
+				fontSize={60}
+				textAnchor="middle"
 				x={(p.topLeft.x + p.bottomRight.x) / 2}
 				y={(p.topLeft.y + p.bottomRight.y) / 2 + 30}
 				fill="Red"
