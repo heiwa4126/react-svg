@@ -72,9 +72,9 @@ function SvgEx2() {
 			<rect width="320" height="180" fill="#00ff00" />
 			<circle r="50" cx="160" cy="90" fill="#ff0000" />
 			<text
-				font-family="Arial"
-				font-size="45"
-				text-anchor="middle"
+				fontFamily="Arial"
+				fontSize={45}
+				textAnchor="middle"
 				fill="#0000ff"
 				data-svgjs="{&quot;leading&quot;:&quot;1.5em&quot;}"
 				x="160"
@@ -85,9 +85,9 @@ function SvgEx2() {
 				</tspan>
 			</text>
 			<text
-				font-family="Consolas, Menlo, monospace"
-				font-size="30"
-				text-anchor="middle"
+				fontFamily="Consolas, Menlo, monospace"
+				fontSize="30"
+				textAnchor="middle"
 				fill="#ffffff"
 				data-svgjs="{&quot;leading&quot;:&quot;1em&quot;}"
 				x="160"
