@@ -1,1 +1,11 @@
 /* ... */
+
+
+/* .my-text {
+	font-family: Arial;
+	text-anchor: middle;
+	fill: black;
+	font-style: italic;
+	font-weight: bold;
+	dy: 0.3em; // dyはダメだった。styleで指定できるものだけらしい
+} */

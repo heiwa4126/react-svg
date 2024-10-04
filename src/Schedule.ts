@@ -71,7 +71,7 @@ export function convertScheduleData(data: ScheduleDataRaw): ScheduleData {
 
 export const rawData: ScheduleDataRaw = {
 	startDate: "2024-10-01", // 省略時はスケジュール群の開始日の最小値とする
-	endDate: "2025-05-31", // 省略時はスケジュール群の終了日の最大値とする
+	endDate: "2025-03-04", // 省略時はスケジュール群の終了日の最大値とする
 	today: "2024-11-10", // 省略時はシステム日付とする
 	scheduleGroups: [
 		{
@@ -81,6 +81,7 @@ export const rawData: ScheduleDataRaw = {
 				{ process: "BD", startDate: "2024-11-10", endDate: "2024-12-21" },
 				{ process: "設計審査", startDate: "2024-12-22", endDate: "2024-12-22" },
 				{ process: "DD", startDate: "2024-12-25", endDate: "2025-01-30" },
+				// { process: "DD", startDate: "2024-12-25", endDate: "2025-05-31" },
 			],
 		},
 		{
@@ -165,4 +166,4 @@ export function getRenderRange(scheduleData: ScheduleData): {
 }
 
 export const scheduleData1 = convertScheduleData(rawData);
-console.log(scheduleData1);
+// console.log(scheduleData1);

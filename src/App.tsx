@@ -26,7 +26,7 @@ export function Links() {
 	return (
 		<ol reversed>
 			<li>
-				<Link to="/4">スケジュール図を書いてみる</Link>
+				<Link to="/4">スケジュール図をSVGで書いてみる</Link>
 			</li>
 			<li>
 				<Link to="/3">SVGを画像にオーバーレイしてみる(2)</Link>

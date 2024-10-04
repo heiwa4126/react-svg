@@ -1,42 +1,95 @@
 import { type Schedule, type ScheduleData, getRenderRange, scheduleData1 } from "./Schedule";
 
-const ADay = 60 * 60 * 24 * 1000; // 1日のミリ秒数
+const ADay = 24; // 1日の時間数
 
-function SvgTask({ data, offsetX }: { data: Schedule; offsetX: number }) {
-	const start = data.startDate.getTime();
-	const duration = (data.endDate.getTime() - start + ADay) / 1000;
-	return <rect width={duration} height={1000000} cx={start / 1000 - offsetX} fill="#00eeee" />;
+function getHour(date: Date): number {
+	// date.getTime()はミリ秒なので、時間に変換する
+	return date.getTime() / (60 * 60 * 1000);
 }
 
-function SvgSchedule({ data }: { data: ScheduleData }) {
-	const { renderStartDate, renderEndDate } = getRenderRange(data);
-	// console.log({ renderStartDate, renderEndDate });
+class SvgScheduleTask {
+	data: ScheduleData;
+	offsetX: number;
+	offsetY: number;
+	duration: number;
 
-	// note: とりあえず秒でいくけど、あとで考慮する
-	const offsetX = renderStartDate.getTime() / 1000;
-	const duration = (renderEndDate.getTime() + ADay - renderStartDate.getTime()) / 1000;
-	console.log({ offsetX, duration });
+	constructor(data: ScheduleData) {
+		this.data = data;
 
-	// const width = 65536; // 最初は適当な値で
-	const width = duration; // 最初は適当な値で
-	const height = duration / 3;
+		const { renderStartDate, renderEndDate } = getRenderRange(data);
+		const rows = data.scheduleGroups.length;
 
-	return (
-		<svg viewBox={`0 0 ${width} ${height}`}>
-			<title>schedule svg</title>
-			<rect width={width} height={height} fill="#eeeeee" />
-			<circle r={height * 0.35} cx={width / 2} cy={height / 2} fill="#dddddd" />
-			<SvgTask offsetX={offsetX} data={data.scheduleGroups[0].schedules[0]} />
-		</svg>
-	);
+		// note: とりあえず時間単位でいくけど、あとで考慮する
+		this.offsetX = getHour(renderStartDate);
+		this.offsetY = 0;
+		this.duration = getHour(renderEndDate) + ADay - getHour(renderStartDate);
+	}
+
+	SvgSchedule = () => {
+		const w = this.duration;
+		const h = this.duration / 3;
+
+		return (
+			<svg viewBox={`0 0 ${w} ${h}`}>
+				<title>schedule svg</title>
+				<style>
+					{`
+						.pname {font-family: Arial;	font-style: italic;	font-weight: bold; text-anchor: middle; fill: black;}
+					`}
+				</style>
+				<rect width={w} height={h} fill="#f2f2f2" />
+				{/* <circle r={h * 0.35} cx={w / 2} cy={h / 2} fill="#dddddd" /> */}
+				<this.SvgTask data={this.data.scheduleGroups[0].schedules[0]} />
+				<this.SvgTask data={this.data.scheduleGroups[0].schedules[1]} />
+				<this.SvgTask data={this.data.scheduleGroups[0].schedules[2]} />
+				<this.SvgTask data={this.data.scheduleGroups[0].schedules[3]} />
+				<this.SvgTask row={1} data={this.data.scheduleGroups[1].schedules[0]} />
+				<this.SvgTask row={1} data={this.data.scheduleGroups[1].schedules[1]} />
+				<this.SvgTask row={1} data={this.data.scheduleGroups[1].schedules[2]} />
+				<this.SvgTask row={2} data={this.data.scheduleGroups[2].schedules[0]} />
+				<this.SvgTask row={2} data={this.data.scheduleGroups[2].schedules[1]} />
+			</svg>
+		);
+	};
+
+	SvgTask = ({ data, row = 0 }: { data: Schedule; row?: number }) => {
+		const start = getHour(data.startDate);
+
+		const width = getHour(data.endDate) - start + ADay;
+		const height = this.offsetX / 1800;
+		const x = start - this.offsetX;
+		const y = height * row + this.offsetY;
+
+		return (
+			<g>
+				<rect
+					{...{ width, height, x, y }}
+					fill="#c8c8fa"
+					stroke="black"
+					strokeWidth="1"
+					vectorEffect="non-scaling-stroke"
+				/>
+				<text
+					x={x + width / 2}
+					y={y + height / 2}
+					fontSize={height / 3}
+					dy="0.3em"
+					className="pname"
+				>
+					{data.process}
+				</text>
+			</g>
+		);
+	};
 }
 
 function App() {
+	const sr = new SvgScheduleTask(scheduleData1);
 	return (
 		<>
-			<h1>4. スケジュール図を書いてみる</h1>
+			<h1>4. スケジュール図をSVGで書いてみる</h1>
 			<div>
-				<SvgSchedule data={scheduleData1} />
+				<sr.SvgSchedule />
 			</div>
 		</>
 	);
