@@ -112,5 +112,57 @@ export const rawData: ScheduleDataRaw = {
 	],
 };
 
+/**
+ * スケジュールデータから最小開始日と最大終了日を取得します。
+ *
+ * @param scheduleData - スケジュールデータのオブジェクト。
+ * @returns 最小開始日と最大終了日を含むオブジェクト。開始日または終了日が存在しない場合は `undefined` を返します。
+ */
+export function getMinMaxDates(scheduleData: ScheduleData): {
+	minStartDate: Date | undefined;
+	maxEndDate: Date | undefined;
+} {
+	let minStartDate: Date | undefined = undefined;
+	let maxEndDate: Date | undefined = undefined;
+
+	for (const groupIndex in scheduleData.scheduleGroups) {
+		const group = scheduleData.scheduleGroups[groupIndex];
+		for (const scheduleIndex in group.schedules) {
+			const schedule = group.schedules[scheduleIndex];
+			if (!minStartDate || schedule.startDate < minStartDate) {
+				minStartDate = schedule.startDate;
+			}
+			if (!maxEndDate || schedule.endDate > maxEndDate) {
+				maxEndDate = schedule.endDate;
+			}
+		}
+	}
+
+	return { minStartDate, maxEndDate };
+}
+
+/**
+ * 描画すべき最初の日と最後の日を求める
+ *
+ * @param scheduleData - スケジュールデータを含むオブジェクト。
+ * @returns レンダリングの開始日と終了日を含むオブジェクト。
+ * @throws 日付が不足している場合、レンダリング範囲を決定できないためエラーをスローします。
+ */
+export function getRenderRange(scheduleData: ScheduleData): {
+	renderStartDate: Date;
+	renderEndDate: Date;
+} {
+	const { minStartDate, maxEndDate } = getMinMaxDates(scheduleData);
+
+	const renderStartDate = scheduleData.startDate || minStartDate;
+	const renderEndDate = scheduleData.endDate || maxEndDate;
+
+	if (!renderStartDate || !renderEndDate) {
+		throw new Error("Unable to determine render range due to missing dates.");
+	}
+
+	return { renderStartDate, renderEndDate };
+}
+
 export const scheduleData1 = convertScheduleData(rawData);
 console.log(scheduleData1);
