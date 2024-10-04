@@ -1,6 +1,7 @@
 import { type Schedule, type ScheduleData, getRenderRange, scheduleData1 } from "./Schedule";
 
 const ADay = 24; // 1日の時間数
+const AYear = ADay * 365.25; // 1年の時間数
 
 function getHour(date: Date): number {
 	// date.getTime()はミリ秒なので、時間に変換する
@@ -8,10 +9,13 @@ function getHour(date: Date): number {
 }
 
 class SvgScheduleTask {
-	data: ScheduleData;
-	offsetX: number;
-	offsetY: number;
-	duration: number;
+	private data: ScheduleData;
+	private offsetX: number;
+	private offsetY: number;
+	private duration: number;
+	private taskHeight: number;
+	private taskGap: number;
+	private tasksHeight: number;
 
 	constructor(data: ScheduleData) {
 		this.data = data;
@@ -19,15 +23,19 @@ class SvgScheduleTask {
 		const { renderStartDate, renderEndDate } = getRenderRange(data);
 		const rows = data.scheduleGroups.length;
 
-		// note: とりあえず時間単位でいくけど、あとで考慮する
+		// とりあえずHour単位でいく。あとで変えるかもしれない
 		this.offsetX = getHour(renderStartDate);
-		this.offsetY = 0;
+		this.offsetY = 1;
 		this.duration = getHour(renderEndDate) + ADay - getHour(renderStartDate);
+		// 幅が変わっても高さはあまり変わらないようにするポリシー
+		this.taskHeight = (AYear / 24) * (this.duration / AYear);
+		this.taskGap = this.taskHeight / 10;
+		this.tasksHeight = (this.taskHeight + this.taskGap) * rows - this.taskGap + 2;
 	}
 
 	SvgSchedule = () => {
 		const w = this.duration;
-		const h = this.duration / 3;
+		const h = this.tasksHeight;
 
 		return (
 			<svg viewBox={`0 0 ${w} ${h}`}>
@@ -52,13 +60,13 @@ class SvgScheduleTask {
 		);
 	};
 
-	SvgTask = ({ data, row = 0 }: { data: Schedule; row?: number }) => {
+	private SvgTask = ({ data, row = 0 }: { data: Schedule; row?: number }) => {
 		const start = getHour(data.startDate);
 
 		const width = getHour(data.endDate) - start + ADay;
-		const height = this.offsetX / 1800;
+		const height = this.taskHeight;
 		const x = start - this.offsetX;
-		const y = height * row + this.offsetY;
+		const y = (this.taskHeight + this.taskGap) * row + this.offsetY;
 
 		return (
 			<g>
