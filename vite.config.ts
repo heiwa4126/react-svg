@@ -10,6 +10,7 @@ export default defineConfig({
 			output: {
 				manualChunks: {
 					r: ["react", "react-dom"],
+					p: ["pptxgenjs"],
 				},
 			},
 		},

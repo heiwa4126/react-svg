@@ -9,8 +9,8 @@ function App() {
 	return (
 		<>
 			<Routes>
-				<Route path="/" element={<App3 />} />
-				<Route path="/index.html" element={<App3 />} />
+				<Route path="/" element={<App4 />} />
+				<Route path="/index.html" element={<App4 />} />
 				{/* ↑デフォルトアプリ */}
 				<Route path="/1" element={<App1 />} />
 				<Route path="/2" element={<App2 />} />
