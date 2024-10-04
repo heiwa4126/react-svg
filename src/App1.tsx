@@ -1,5 +1,4 @@
 import { SVG, type Svg } from "@svgdotjs/svg.js";
-import "./App.css";
 import SvgEx3 from "./assets/svgex3.svg";
 
 /**

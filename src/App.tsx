@@ -3,6 +3,7 @@ import "./App.css";
 import App1 from "./App1";
 import App2 from "./App2";
 import App3 from "./App3";
+import App4 from "./App4";
 
 function App() {
 	return (
@@ -14,6 +15,7 @@ function App() {
 				<Route path="/1" element={<App1 />} />
 				<Route path="/2" element={<App2 />} />
 				<Route path="/3" element={<App3 />} />
+				<Route path="/4" element={<App4 />} />
 			</Routes>
 			<Links />
 		</>
@@ -22,15 +24,18 @@ function App() {
 
 export function Links() {
 	return (
-		<ol>
+		<ol reversed>
 			<li>
-				<Link to="/1">動的にSVGを作って描画する</Link>
+				<Link to="/4">スケジュール図を書いてみる</Link>
+			</li>
+			<li>
+				<Link to="/3">SVGを画像にオーバーレイしてみる(2)</Link>
 			</li>
 			<li>
 				<Link to="/2">SVGを画像にオーバーレイしてみる</Link>
 			</li>
 			<li>
-				<Link to="/3">SVGを画像にオーバーレイしてみる(2)</Link>
+				<Link to="/1">動的にSVGを作って描画する</Link>
 			</li>
 		</ol>
 	);

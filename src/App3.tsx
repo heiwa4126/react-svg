@@ -1,5 +1,3 @@
-import "./App.css";
-
 import Qr5 from "./assets/qr5.jpg";
 
 type Position = {
