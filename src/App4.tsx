@@ -12,9 +12,12 @@ function getHour(date: Date): number {
 
 class SvgScheduleTask {
 	private data: ScheduleData;
+	private renderStartDate: Date;
+	private renderEndDate: Date;
 	private offsetX: number;
-	private offsetY: number;
+	private taskOffsetY: number;
 	private duration: number;
+	private dateHeight: number;
 	private taskHeight: number;
 	private taskGap: number;
 	private tasksHeight: number;
@@ -23,16 +26,20 @@ class SvgScheduleTask {
 		this.data = data;
 
 		const { renderStartDate, renderEndDate } = getRenderRange(data);
+		this.renderStartDate = renderStartDate;
+		this.renderEndDate = renderEndDate;
 		const rows = data.scheduleGroups.length;
 
 		// とりあえずHour単位でいく。あとで変えるかもしれない
 		this.offsetX = getHour(renderStartDate);
-		this.offsetY = 1;
 		this.duration = getHour(renderEndDate) + ADay - getHour(renderStartDate);
 		// 幅が変わっても高さはあまり変わらないようにするポリシー
+		this.dateHeight = ((AYear / 24) * (this.duration / AYear)) / 2;
 		this.taskHeight = (AYear / 24) * (this.duration / AYear);
+		this.taskOffsetY = 1 + this.dateHeight;
 		this.taskGap = this.taskHeight / 10;
-		this.tasksHeight = (this.taskHeight + this.taskGap) * rows - this.taskGap + 2;
+		this.tasksHeight =
+			this.taskOffsetY + (this.taskHeight + this.taskGap) * rows - this.taskGap + 2;
 	}
 
 	getDimensions = () => {
@@ -48,7 +55,7 @@ class SvgScheduleTask {
 		const width = getHour(data.endDate) - start + ADay;
 		const height = this.taskHeight;
 		const x = start - this.offsetX;
-		const y = (this.taskHeight + this.taskGap) * row + this.offsetY;
+		const y = (this.taskHeight + this.taskGap) * row + this.taskOffsetY;
 
 		return (
 			<g>
@@ -86,6 +93,30 @@ class SvgScheduleTask {
 				</style>
 				<rect width={w} height={h} fill="#f2f2f2" />
 				{/* <circle r={h * 0.35} cx={w / 2} cy={h / 2} fill="#dddddd" /> */}
+				{Array.from({
+					length: Math.ceil(
+						(this.renderEndDate.getTime() - this.renderStartDate.getTime()) /
+							(30 * 24 * 60 * 60 * 1000),
+					),
+				}).map((_, index) => {
+					const monthStart = new Date(this.renderStartDate.getTime());
+					console.log(monthStart);
+					monthStart.setMonth(this.renderStartDate.getMonth() + index);
+					const x = getHour(monthStart) - this.offsetX;
+					return (
+						<line
+							key={index}
+							x1={x}
+							y1={0}
+							x2={x}
+							y2={h}
+							stroke="black"
+							strokeWidth="1"
+							vectorEffect="non-scaling-stroke"
+						/>
+					);
+				})}
+
 				{this.data.scheduleGroups.map((group, rowIndex) =>
 					group.schedules.map((schedule) => (
 						<this.SvgTask key={`${rowIndex}-${schedule.process}`} row={rowIndex} data={schedule} />
