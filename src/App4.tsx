@@ -1,3 +1,4 @@
+import { format } from "date-fns";
 import PptxGenJS from "pptxgenjs";
 import { forwardRef, useRef } from "react";
 import { type Schedule, type ScheduleData, getRenderRange, scheduleData1 } from "./Schedule";
@@ -49,7 +50,7 @@ class SvgScheduleTask {
 		};
 	};
 
-	private SvgTask = ({ data, row = 0 }: { data: Schedule; row?: number }) => {
+	private drawTask = ({ data, row = 0 }: { data: Schedule; row?: number }) => {
 		const start = getHour(data.startDate);
 
 		const width = getHour(data.endDate) - start + ADay;
@@ -59,13 +60,7 @@ class SvgScheduleTask {
 
 		return (
 			<g>
-				<rect
-					{...{ width, height, x, y }}
-					fill="#c8c8fa"
-					stroke="black"
-					strokeWidth="1"
-					vectorEffect="non-scaling-stroke"
-				/>
+				<rect {...{ width, height, x, y }} fill="#c8c8fa" className="tbox" />
 				<text
 					x={x + width / 2}
 					y={y + height / 2}
@@ -90,16 +85,34 @@ class SvgScheduleTask {
 			monthStart.setMonth(this.renderStartDate.getMonth() + index);
 			const x = getHour(monthStart) - this.offsetX;
 			return (
-				<line
-					key={monthStart.toISOString()}
-					x1={x}
-					y1={0}
-					x2={x}
-					y2={this.tasksHeight}
-					className="mline"
-				/>
+				<g key={monthStart.toISOString()}>
+					<line x1={x} y1={0} x2={x} y2={this.tasksHeight} className="mline" />
+					<text
+						x={x}
+						y={1}
+						fontSize={this.dateHeight / 1.7}
+						className="mname"
+						dx="0.2em"
+						dy="1.0em"
+					>
+						{format(monthStart, "yy/M")}
+					</text>
+				</g>
 			);
 		});
+	};
+
+	private drawTodayLine = () => {
+		const today = this.data.today || new Date();
+		const x = getHour(today) - this.offsetX;
+		return (
+			<g key="today-line">
+				<line x1={x} y1={0} x2={x} y2={this.tasksHeight} className="tline" />
+				<text x={x} y={1} fontSize={this.dateHeight / 1.7} className="tname" dx="0.2em" dy="1.0em">
+					{format(today, "M/d")}
+				</text>
+			</g>
+		);
 	};
 
 	SvgSchedule = forwardRef<SVGSVGElement>((_, ref) => {
@@ -111,8 +124,12 @@ class SvgScheduleTask {
 				<title>schedule svg</title>
 				<style>
 					{`
-						.pname {font-family: Arial;	font-style: italic;	font-weight: bold; text-anchor: middle; fill: black;}
+						.pname {font-family: Arial;	font-weight: bold; text-anchor: middle; fill: black; letter-spacing: -0.05em }
+						.tbox {stroke: black; stroke-width: 1; vector-effect: non-scaling-stroke;}
+						.mname {font-family: "Times New Roman";	font-weight: bold; font-style: normal;	text-anchor: left; fill: black; letter-spacing: -0.05em}
 						.mline {stroke: black; stroke-width: 1; vector-effect: non-scaling-stroke;}
+						.tname {font-family: "Times New Roman";	font-weight: bold; font-style: normal;	text-anchor: left; fill: red; letter-spacing: -0.05em}
+						.tline {stroke: red; stroke-width: 1; vector-effect: non-scaling-stroke;}
 					`}
 				</style>
 				<rect width={w} height={h} fill="#f2f2f2" />
@@ -121,9 +138,12 @@ class SvgScheduleTask {
 				</g>
 				{this.data.scheduleGroups.map((group, rowIndex) =>
 					group.schedules.map((schedule) => (
-						<this.SvgTask key={`${rowIndex}-${schedule.process}`} row={rowIndex} data={schedule} />
+						<this.drawTask key={`${rowIndex}-${schedule.process}`} row={rowIndex} data={schedule} />
 					)),
 				)}
+				<g>
+					<this.drawTodayLine />
+				</g>
 			</svg>
 		);
 	});
