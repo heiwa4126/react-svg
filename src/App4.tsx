@@ -79,6 +79,29 @@ class SvgScheduleTask {
 		);
 	};
 
+	private drawMonthlyLines = () => {
+		return Array.from({
+			length: Math.ceil(
+				(this.renderEndDate.getTime() - this.renderStartDate.getTime()) /
+					(30 * 24 * 60 * 60 * 1000),
+			),
+		}).map((_, index) => {
+			const monthStart = new Date(this.renderStartDate.getTime());
+			monthStart.setMonth(this.renderStartDate.getMonth() + index);
+			const x = getHour(monthStart) - this.offsetX;
+			return (
+				<line
+					key={monthStart.toISOString()}
+					x1={x}
+					y1={0}
+					x2={x}
+					y2={this.tasksHeight}
+					className="mline"
+				/>
+			);
+		});
+	};
+
 	SvgSchedule = forwardRef<SVGSVGElement>((_, ref) => {
 		const w = this.duration;
 		const h = this.tasksHeight;
@@ -89,34 +112,13 @@ class SvgScheduleTask {
 				<style>
 					{`
 						.pname {font-family: Arial;	font-style: italic;	font-weight: bold; text-anchor: middle; fill: black;}
+						.mline {stroke: black; stroke-width: 1; vector-effect: non-scaling-stroke;}
 					`}
 				</style>
 				<rect width={w} height={h} fill="#f2f2f2" />
-				{/* <circle r={h * 0.35} cx={w / 2} cy={h / 2} fill="#dddddd" /> */}
-				{Array.from({
-					length: Math.ceil(
-						(this.renderEndDate.getTime() - this.renderStartDate.getTime()) /
-							(30 * 24 * 60 * 60 * 1000),
-					),
-				}).map((_, index) => {
-					const monthStart = new Date(this.renderStartDate.getTime());
-					console.log(monthStart);
-					monthStart.setMonth(this.renderStartDate.getMonth() + index);
-					const x = getHour(monthStart) - this.offsetX;
-					return (
-						<line
-							key={index}
-							x1={x}
-							y1={0}
-							x2={x}
-							y2={h}
-							stroke="black"
-							strokeWidth="1"
-							vectorEffect="non-scaling-stroke"
-						/>
-					);
-				})}
-
+				<g>
+					<this.drawMonthlyLines />
+				</g>
 				{this.data.scheduleGroups.map((group, rowIndex) =>
 					group.schedules.map((schedule) => (
 						<this.SvgTask key={`${rowIndex}-${schedule.process}`} row={rowIndex} data={schedule} />
