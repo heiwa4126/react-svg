@@ -18,8 +18,8 @@ function App() {
 				</text>
 			</svg>
 			<p>
-				Chrome で SVG の <code>25年1月</code> が <code>25 年 1 月</code>のように表示される。Edge と
-				Firefox は期待通り表示される。
+				Chrome で SVG の <code>25年1月</code> が <code>25 年 1 月</code>のように表示される
+				(英数字と漢字の間に余分な文字間が挿入される)。 Edge と Firefox は期待通り表示される。
 			</p>
 		</>
 	);
