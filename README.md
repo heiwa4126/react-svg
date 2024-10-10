@@ -1,6 +1,7 @@
 # react-svg
 
-React で SVG を扱う練習。
+React で SVG を扱う練習。デバッグなんかにも使うよ。
+
 Vite で Bun で TypeScript。
 
 ```sh
