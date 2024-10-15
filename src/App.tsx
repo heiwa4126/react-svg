@@ -7,13 +7,14 @@ import App4 from "./App4";
 import App5 from "./App5";
 import App6 from "./App6";
 import App7 from "./App7";
+import App8 from "./App8";
 
 function App() {
 	return (
 		<>
 			<Routes>
-				<Route path="/" element={<App7 />} />
-				<Route path="/index.html" element={<App7 />} />
+				<Route path="/" element={<App8 />} />
+				<Route path="/index.html" element={<App8 />} />
 				{/* ↑デフォルトアプリ */}
 				<Route path="/1" element={<App1 />} />
 				<Route path="/2" element={<App2 />} />
@@ -22,6 +23,7 @@ function App() {
 				<Route path="/5" element={<App5 />} />
 				<Route path="/6" element={<App6 />} />
 				<Route path="/7" element={<App7 />} />
+				<Route path="/8" element={<App8 />} />
 			</Routes>
 			<Links />
 		</>
@@ -31,6 +33,9 @@ function App() {
 export function Links() {
 	return (
 		<ol reversed>
+			<li>
+				<Link to="/8">重なるテキストをずらす(2)</Link>
+			</li>
 			<li>
 				<Link to="/7">重なるテキストをずらす</Link>
 			</li>
