@@ -19,6 +19,9 @@ const SvgTextComponent = ({ texts, gap = 40 }: { texts: string[]; gap?: number }
 			return;
 		}
 		const yPosArray: number[] = [];
+		// const bboxes = textRefs.current
+		// 	.filter((ref): ref is SVGTextElement => ref !== null)
+		// 	.map((ref) => ref.getBoundingClientRect());
 		const bboxes = textRefs.current
 			.filter((ref): ref is SVGTextElement => ref !== null)
 			.map((ref) => ref.getBBox());
@@ -49,19 +52,23 @@ const SvgTextComponent = ({ texts, gap = 40 }: { texts: string[]; gap?: number }
 		setYPositions(yPosArray);
 	}, []);
 
+	const w = 400;
+	const h = 120;
+	const s = 1; // for DEBUG
+
 	return (
-		<svg width="400" height="120">
+		<svg width={w} height={h} viewBox={`0 0 ${w * s} ${h * s}`}>
 			<title>SvgTextComponent</title>
-			<rect x="0" y="0" width="400" height="120" fill="#eeeeee" />
+			<rect x="0" y="0" width={w * s} height={h * s} fill="#eeeeee" />
 			{texts.map((text, index) => (
 				<text
 					key={`${index}${text}`}
 					// biome-ignore lint/suspicious/noAssignInExpressions: <explanation>
 					ref={(el) => (textRefs.current[index] = el)}
-					x={gap * index} // 各テキストを少し右にずらす例
+					x={gap * s * index} // 各テキストを少し右にずらす例
 					y={yPositions[index]} // 計算したy座標を適用
 					textAnchor="left"
-					fontSize="16"
+					fontSize={16 * s}
 					dy="1em"
 				>
 					{text}
