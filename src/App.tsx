@@ -8,6 +8,7 @@ import App5 from "./App5";
 import App6 from "./App6";
 import App7 from "./App7";
 import App8 from "./App8";
+import App9 from "./App9";
 
 function App() {
 	return (
@@ -24,6 +25,7 @@ function App() {
 				<Route path="/6" element={<App6 />} />
 				<Route path="/7" element={<App7 />} />
 				<Route path="/8" element={<App8 />} />
+				<Route path="/9" element={<App9 />} />
 			</Routes>
 			<Links />
 		</>
@@ -33,6 +35,9 @@ function App() {
 export function Links() {
 	return (
 		<ol reversed>
+			<li>
+				<Link to="/9">SVGをzoom & scroll</Link>
+			</li>
 			<li>
 				<Link to="/8">重なるテキストをずらす(2)</Link>
 			</li>
