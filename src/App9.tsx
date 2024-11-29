@@ -100,8 +100,10 @@ function App() {
 							height: "auto",
 						}}
 					>
+						<title>svg container</title>
 						{/* SVG content here */}
 						<svg xmlns="http://www.w3.org/2000/svg" width="320" height="180">
+							<title>svg content</title>
 							<path fill="#0f0" d="M0 0h320v180H0z" />
 							<circle cx="160" cy="90" r="50" fill="red" />
 							<text

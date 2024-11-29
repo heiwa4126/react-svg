@@ -1,4 +1,4 @@
-import { format } from "date-fns";
+import dayjs from "dayjs";
 import PptxGenJS from "pptxgenjs";
 import { forwardRef, useRef } from "react";
 import { type Schedule, type ScheduleData, getRenderRange, scheduleData1 } from "./Schedule";
@@ -95,7 +95,7 @@ class SvgScheduleTask {
 						dx="0.2em"
 						dy="1.0em"
 					>
-						{format(monthStart, "yy/M")}
+						{dayjs(monthStart).format("YY/M")}
 					</text>
 				</g>
 			);
@@ -109,7 +109,7 @@ class SvgScheduleTask {
 			<g key="today-line">
 				<line x1={x} y1={0} x2={x} y2={this.tasksHeight} className="tline" />
 				<text x={x} y={1} fontSize={this.dateHeight / 1.7} className="tname" dx="0.2em" dy="1.0em">
-					{format(today, "M/d")}
+					{dayjs(today).format("M/D")}
 				</text>
 			</g>
 		);
